@@ -4,7 +4,8 @@
   "description": "Simple Node.js Server",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "node index.js"
   },
   "author": "Samuele Carpani",
   "license": "ISC",
