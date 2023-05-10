@@ -96,10 +96,11 @@ app.get('/check_photo_saved', (req, res) => {
     }
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log(port);
 });
 
+module.exports = app;
 
 async function prediction(filePath) {
 
