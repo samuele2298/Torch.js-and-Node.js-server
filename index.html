@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Prediction Web Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+        integrity="sha512-h3debeMszJjTP56Amw7Wzpxvam6H0k6+/oU8llbW9XvUZLJhApPGlpiZ8WFTBwnxvSY6UeB6Uo2AHmhuX9Uvug=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+    <style>
+        /* Reset styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* Header styles */
+        header {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Main content styles */
+        main {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .main-section {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .forecast-section {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            width: 20%;
+            margin-right: 20px;
+        }
+
+        .all-section {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-right: 10px;
+        }
+
+        section {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 15px;
+        }
+
+
+        .upload-section,
+        .download-section,
+        .model-section {
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-section {
+                flex-direction: column;
+            }
+
+            .menu-section {
+                width: 100%;
+                margin-right: 0;
+            }
+
+            .image-section {
+                order: -1;
+                margin-bottom: 0;
+            }
+        }
+
+        /* Stili per i bottoni su schermi più grandi */
+        @media screen and (min-width: 768px) {
+            input[type="submit"] {
+                padding: 12px 24px;
+                font-size: 18px;
+            }
+        }
+
+        /* Stili per i bottoni su schermi più piccoli */
+        @media screen and (max-width: 767px) {
+            input[type="submit"] {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+
+        .image-section {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
+            height: 100%;
+
+        }
+
+        .result-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            margin-bottom: 10px;
+            max-width: 900px;
+            /* limita la larghezza massima dell'immagine */
+
+        }
+
+
+        .legend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .legend-item::before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+
+        .legend-item--blue::before {
+            background-color: blue;
+        }
+
+        .legend-item--red::before {
+            background-color: red;
+        }
+
+        /* Explanation styles */
+        .explanation-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .metrics-section {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .metrics-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .metric-item {
+            background-color: #F6F6F6;
+            border: 2px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        .metric-item:last-child {
+            margin-right: 0;
+        }
+
+        .metric-item--green {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        .metric-item--yellow {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        .metric-item--red {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+
+        input[type="submit"] {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        /* Download button styles */
+        .download-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .download-btn a {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 auto;
+        }
+
+        .download-btn a:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        #data-type {
+            appearance: none;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid #000;
+            color: #000;
+            font-size: 16px;
+            padding: 8px;
+            width: 100%;
+            margin-bottom: 16px;
+            text-align: center;
+
+        }
+
+        #data-type option {
+            background-color: #fff;
+            color: #000;
+            font-size: 16px;
+        }
+
+        #data-type:focus {
+            outline: none;
+            border-bottom-color: #000;
+        }
+
+        .file-info {
+            text-align: center;
+            font-size: 16px;
+
+
+        }
+
+
+        /* Footer styles */
+        footer {
+            background-color: #000;
+            color: #fff;
+            padding: 30px;
+            text-align: center;
+            position: static;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-credits a {
+            color: #fff;
+        }
+    </style>
+    <script>
+
+        // Legge il file .txt con le metriche
+        fetch('/plot/metrics.txt')
+            .then(response => response.text())
+            .then(data => {
+                // Separa le prime tre righe e le inserisce nei paragrafi corrispondenti
+                const metrics = data.split('\n');
+                document.getElementById('metric-line-1').textContent = metrics[0];
+                document.getElementById('metric-line-2').textContent = metrics[1];
+                document.getElementById('metric-line-3').textContent = metrics[2];
+            });
+
+        const select = document.getElementById("data-type");
+        const fileInput = document.getElementById("datafile");
+
+        /*Messaggio di errore
+        select.addEventListener("change", function () {
+            if (select.value !== "") {
+                fileInput.required = false;
+            } else {
+                fileInput.required = true;
+                alert("Seleziona un'opzione o carica un file");
+            }
+        });
+        function showAlert() {
+            const fileInput = document.getElementById('datafile');
+
+            //if (fileInput.files.length === 0) {
+            //    alert('Selezionare un file prima di caricare!');
+            //    return;
+            //}
+
+            const alertMsg = 'Hai caricato il modello. Attendere qualche minuto che l\'algoritmo lo elabori. La pagina verrà ricaricata automaticamente.';
+            alert(alertMsg);
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 5000);
+        }
+        const submitBtn = document.querySelector('input[type="submit"]');
+        submitBtn.addEventListener('click', showAlert);
+
+        */
+
+        //Per timer AJAX
+        setInterval(() => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/check_photo_saved');
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.photo_saved) {
+                        // Aggiorna la pagina web per mostrare la nuova foto
+                        location.reload();
+                    }
+                }
+            };
+            xhr.send();
+        }, 2000); // Effettua la richiesta ogni 5 secondi
+
+
+
+
+    </script>
+
+</head>
+
+<body>
+    <main>
+        <div class="all-section">
+            <div class="main-section">
+
+                <div class="menu-section">
+
+                    <section class="upload-section">
+                        <h2>Carica</h2>
+                        <div class="form-container">
+                            <form action="/upload" method="post" enctype="multipart/form-data">
+                                <label for="data-type">Seleziona da esempi:</label>
+                                <select name="data-type" id="data-type">
+                                    <option value="apple">Apple</option>
+                                    <option value="ko">Coca Cola</option>
+                                    <option value="ibm">IBM</option>
+                                    <option value="ge">General Motors</option>
+                                    <option value="jpm">JP Morgan</option>
+                                </select>
+                                <br><br>
+                                <label for="datafile">Seleziona il file:</label>
+                                <input type="file" name="datafile" id="datafile" accept=".txt">
+
+                                <!--
+                                <label for="datafile" id="drag-area">
+                                    <input type="file" name="datafile" id="datafile" accept=".txt" hidden>
+                                    <span class="fas fa-cloud-upload-alt"></span>
+                                    <span>Trascina il file qui o clicca per sceglierlo</span>
+                                </label>-->
+
+                                <input type="submit" value="Carica">
+                            </form>
+                        </div>
+                    </section>
+
+                    <section class="model-section">
+                        <h2>Modello</h2>
+                        <p>Scegli il modello per la previsione.</p>
+                        <select name="data-type" id="data-type">
+                            <option value="apple">Modello 1</option>
+                            <option value="ko">Modello 2</option>
+                            <option value="ibm">Modello 3</option>
+                            <option value="ge">Modello 4</option>
+                            <option value="jpm">Modello 5</option>
+                        </select>
+                    </section>
+
+                    <section class="download-section">
+                        <h2>Scarica</h2>
+                        <p>Scarica gli esempi forniti.</p><br>
+                        <div class="download-btn">
+                            <a href="/download">Esempi</a>
+                        </div>
+                    </section>
+
+
+                </div>
+
+                <section class="image-section">
+                    <div class="legend">
+                        <div class="legend-item legend-item--blue">
+                            <span>Dati originali</span>
+                        </div>
+                        <div class="legend-item legend-item--red">
+                            <span>Previsioni</span>
+                        </div>
+                        <!--<div class="legend-item legend-item--green">
+                            <span>Forecast</span>
+                        </div>-->
+                    </div>
+                    <img class="result-image" src="/plot/chart.svg" alt="Prediction results"
+                        onerror="this.onerror=null; this.src='/images/no-image.png'; this.alt='Carica il file per vedere!';">
+
+                    <div class="matrics-section">
+                        <div class="metrics-container d-flex">
+                            <p class="metric-item--green" id="metric-line-1"></p>
+                            <p class="metric-item--yellow" id="metric-line-2"></p>
+                            <p class="metric-item--red" id="metric-line-3"></p>
+                        </div>
+
+
+                    </div><br><br>
+
+
+                </section>
+
+            </div>
+
+
+            <section class="explanation-section">
+                <h2>Come funziona</h2>
+                <p>L'algoritmo di previsione dei prezzi basato sul modello LSTM di Torch è un algoritmo di apprendimento
+                    automatico
+                    utilizzato per analizzare i dati storici sui prezzi e fare previsioni sulle tendenze future.
+
+                    Il modello LSTM, o Long Short-Term Memory, è una rete neurale ricorrente in grado di elaborare
+                    sequenze
+                    di dati, come le
+                    serie temporali, e di mantenere una memoria a lungo termine delle informazioni passate. Ciò
+                    significa
+                    che il modello è
+                    in grado di apprendere dalle sequenze di dati precedenti e di utilizzare questa conoscenza per fare
+                    previsioni future.
+
+                    Il modello LSTM viene addestrato sui dati storici dei prezzi utilizzando l'algoritmo di
+                    backpropagation,
+                    che ottimizza i
+                    pesi del modello per minimizzare l'errore di previsione. Una volta addestrato, il modello è in grado
+                    di
+                    fare previsioni
+                    sulle tendenze future dei prezzi in base ai dati in ingresso.
+
+                    Per utilizzare l'algoritmo di previsione dei prezzi basato sul modello LSTM di Torch in un server
+                    Node.js, è possibile
+                    importare il modello utilizzando Torch.js, una libreria JavaScript che consente di utilizzare i
+                    modelli
+                    di Torch
+                    all'interno di un ambiente JavaScript. Ciò consente di utilizzare l'algoritmo di previsione dei
+                    prezzi
+                    in un server
+                    Node.js e di integrarlo in un'applicazione web o mobile per fare previsioni sui prezzi in tempo
+                    reale.
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-description">
+            <h2>
+                <italic>Credits: Samuele Carpani</italic>
+            </h2><br>
+            <span>Tesi di laurea triennale: "Analisi e previsione del prezzo delle criptovalute con l'utilizzo di
+                tecniche di machine learning e reti neurali"</span><br><br><br>
+            <span><a href="https://github.com/username/repository">Link al repository Github</a></span>
+
+
+        </div>
+    </footer>
+
+</body>
+
+</html>
