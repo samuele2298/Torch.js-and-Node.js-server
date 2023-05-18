@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel-build": "yarn && yarn build"
+    "build": "echo 'Build step placeholder'",
+    "vercel-build": "yarn && yarn build",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Samuele Carpani",
   "license": "ISC",
