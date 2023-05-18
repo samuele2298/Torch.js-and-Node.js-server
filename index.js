@@ -12,6 +12,7 @@ const { createCanvas } = require('canvas');
 const multer = require('multer');
 const upload = multer({ dest: 'src/assets/upload' });
 const D3Node = require('d3-node');
+const math = require('mathjs');
 
 
 const app = express();
@@ -105,7 +106,7 @@ module.exports = app;
 async function prediction(filePath) {
 
     // Load the TorchScript model
-    const modelPath = __dirname + '/model.pt';
+    const modelPath = __dirname + '/models/model.pt';
     const model = new torch.ScriptModule(modelPath);
 
     // Read the .txt file and convert the 'Close' column to a tensor
@@ -169,23 +170,21 @@ async function prediction(filePath) {
 
     const tmp = Array.from(output_tensor.toObject().data);
 
+
     //Unscaling
     const unscaled_output_data = scaler.inverse_transform(tmp);
     unscaled_output_data.reverse();
     //console.log(unscaled_output_data);
-
 
     //const number_prediction = 5;
     //const futurePredictions = await forecast(model, closeValues, seq_length, number_prediction);
     //console.log("\nPredictions");
     //console.log(futurePredictions);
 
-
     //const predictionString = futurePredictions.join(',');
     //fs.writeFile('/predictions.txt', predictionString, (err) => {
     //    if (err) throw err;
     //});
-
 
     //Date successive per il plot
     //const lastDate = dates[dates.length - 1];
@@ -196,11 +195,32 @@ async function prediction(filePath) {
     //});
 
     //Plot
+    //const originals = closeValues.slice(0, closeValues.length - 58); // I valori di riferimento corrispondenti
+
+
+
+    //metric(originals, unscaled_output_data);
     generateChart(closeValues, unscaled_output_data, dates);
     console.log("Complete elaboration!");
 }
 
+function metric(originals, predictions) {
 
+    // Supponiamo di avere un array di previsioni e un array di valori di riferimento
+    //const predictions = [10, 15, 20, 25];
+    //const references = [12, 18, 22, 27];
+    //originals.slice(0, originals.length - 59); // I valori di riferimento corrispondenti
+
+    // Calcolo delle metriche
+    const squaredErrors = math.square(math.map(math.subtract(predictions, originals), math.square));
+    const rmse = math.sqrt(math.mean(squaredErrors));
+    const mae = math.mean(math.abs(math.subtract(predictions, originals)));
+    const r2 = 1 - math.variance(squaredErrors) / math.variance(originals);
+
+    console.log('RMSE:', rmse);
+    console.log('MAE:', mae);
+    console.log('R2:', r2);
+}
 
 async function generateChart(inputData, predictedData, dates) {
     // For the model delay 59 -> seq-length

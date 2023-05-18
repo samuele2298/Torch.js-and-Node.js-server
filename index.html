@@ -9,8 +9,6 @@
         integrity="sha512-h3debeMszJjTP56Amw7Wzpxvam6H0k6+/oU8llbW9XvUZLJhApPGlpiZ8WFTBwnxvSY6UeB6Uo2AHmhuX9Uvug=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
-
     <style>
         /* Reset styles */
         * {
@@ -24,6 +22,9 @@
             font-family: Arial, sans-serif;
             background-color: #fff;
             color: #333;
+            background-image: url("back.jpg");
+            background-size: cover;
+            background-position: center;
         }
 
         /* Header styles */
@@ -415,7 +416,7 @@
                                     <option value="ge">General Motors</option>
                                     <option value="jpm">JP Morgan</option>
                                 </select>
-                                <br><br>
+                                <br>
                                 <label for="datafile">Seleziona il file:</label>
                                 <input type="file" name="datafile" id="datafile" accept=".txt">
 
@@ -425,7 +426,7 @@
                                     <span class="fas fa-cloud-upload-alt"></span>
                                     <span>Trascina il file qui o clicca per sceglierlo</span>
                                 </label>-->
-
+                                <br><br>
                                 <input type="submit" value="Carica">
                             </form>
                         </div>
@@ -486,8 +487,10 @@
 
 
             <section class="explanation-section">
+
                 <h2>Come funziona</h2>
-                <p>L'algoritmo di previsione dei prezzi basato sul modello LSTM di Torch è un algoritmo di apprendimento
+                <p>L'algoritmo di previsione dei prezzi basato sul modello LSTM di Torch è un algoritmo di
+                    apprendimento
                     automatico
                     utilizzato per analizzare i dati storici sui prezzi e fare previsioni sulle tendenze future.
 
@@ -497,18 +500,21 @@
                     serie temporali, e di mantenere una memoria a lungo termine delle informazioni passate. Ciò
                     significa
                     che il modello è
-                    in grado di apprendere dalle sequenze di dati precedenti e di utilizzare questa conoscenza per fare
+                    in grado di apprendere dalle sequenze di dati precedenti e di utilizzare questa conoscenza per
+                    fare
                     previsioni future.
 
                     Il modello LSTM viene addestrato sui dati storici dei prezzi utilizzando l'algoritmo di
                     backpropagation,
                     che ottimizza i
-                    pesi del modello per minimizzare l'errore di previsione. Una volta addestrato, il modello è in grado
+                    pesi del modello per minimizzare l'errore di previsione. Una volta addestrato, il modello è in
+                    grado
                     di
                     fare previsioni
                     sulle tendenze future dei prezzi in base ai dati in ingresso.
 
-                    Per utilizzare l'algoritmo di previsione dei prezzi basato sul modello LSTM di Torch in un server
+                    Per utilizzare l'algoritmo di previsione dei prezzi basato sul modello LSTM di Torch in un
+                    server
                     Node.js, è possibile
                     importare il modello utilizzando Torch.js, una libreria JavaScript che consente di utilizzare i
                     modelli
@@ -528,11 +534,9 @@
             <h2>
                 <italic>Credits: Samuele Carpani</italic>
             </h2><br>
-            <span>Tesi di laurea triennale: "Analisi e previsione del prezzo delle criptovalute con l'utilizzo di
-                tecniche di machine learning e reti neurali"</span><br><br><br>
+            <span>Tesi di laurea triennale: "Sviluppo di un'applicazione web per la previsione dei prezzi delle azioni
+                utilizzando LSTM e Torch.js"</span><br><br><br>
             <span><a href="https://github.com/username/repository">Link al repository Github</a></span>
-
-
         </div>
     </footer>
 
